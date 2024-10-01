@@ -15,10 +15,10 @@ def start_client(server_ip, server_port):
         while True:
             message = input("Enter message to send: ")
             client_socket.sendall(message.encode())
+            time.sleep(0.3)
             data = client_socket.recv(1024)
-            time.sleep(0.1)
             print(f"Received: {data.decode()}")
-            if check1(data.decode()):
+            if check1(data.decode()) or str(data.decode()) == "200 OK: Closing Connection\n":
                 break
 
 
