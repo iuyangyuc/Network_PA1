@@ -38,7 +38,6 @@ def rtt_measurement(connection, size, probes):
 def tput_measurement(connection, size, probes):
     list = []
     remote_host = connection.getpeername()[0]
-    #open("tput.txt", "w").close()
     open("tput.txt", "a").write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
     for i in range(probes):
         rtt = ping3.ping(remote_host, int(size))
@@ -116,7 +115,6 @@ def start_server(port):
                     if not check1(message) and not check2(message, message_size) and not check3(message) and terminate == False:
                         connection.sendall(b"404 ERROR: Invalid Connection Termination Message\n")
                         break
-
                 else:
                     print(f"Connection closed by {client_address}")
                     break
