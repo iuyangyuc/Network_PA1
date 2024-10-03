@@ -1,6 +1,15 @@
 import socket
 import sys
 
+def receive_message(connection):
+    data = b""
+    while True:
+        part = connection.recv(1024)
+        data += part
+        if len(part) < 1024:
+            break
+    return data
+
 def start_client(server_ip, server_port):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_address = (server_ip, server_port)
@@ -13,7 +22,7 @@ def start_client(server_ip, server_port):
             if message.lower() == 'exit':
                 print("Exiting the client...")
                 break
-            data = client_socket.recv(1024)
+            data = receive_message(client_socket)
             print(f"Received echo: {data.decode()}")
 
     finally:
