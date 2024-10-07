@@ -8,10 +8,10 @@ def check1(message):
     return re.match(r"^s\s(rtt\s([1-9]|10)\s(1|100|200|400|800|1000)|tput\s([1-9]|10)\s(1000|2000|4000|8000|16000|32000))\s([0-9]{1,3}|1000)$", message)
 
 def check2(message, expected_size, expected_seq):
-    # print("check2: " + message)
     actual_size = get_test_datelen(message)
     actual_seq = get_test_seq(message)
     return actual_size == int(expected_size) and actual_seq == expected_seq
+    # return actual_size == expected_size and actual_seq == expected_seq
 
 def check2_noseq(message):
     list = message.split()
@@ -25,9 +25,6 @@ def get_message_size(message):
 
 def get_message_probes(message):
     return int(message.split()[2])
-
-def get_message_delay(message):
-    return float(message.split()[4])
 
 def get_type(message):
     return message.split()[1]
@@ -72,9 +69,8 @@ def start_server(port):
                     message = data.decode()
 
                     if check1(message):
-                        # print("phase1: " + message)
+                        print("phase1 Received: " + message)
                         connection.sendall(b"200 OK\n")
-                        connection.sendall(data)
                         message_size = get_message_size(message)
                         message_probes = get_message_probes(message)
                         setUp = True
@@ -84,16 +80,19 @@ def start_server(port):
                         break
 
                     elif check2_noseq(message):
+                        print(f"Phase4 Received: {message}")
                         measure = True
                         for i in range(message_probes):
-                            time.sleep(get_message_delay(message))
                             connection.sendall(data)
                             data = receive_message(connection)
+                            print(f"Phase2 Received: {data.decode()}")
+                            # time.sleep(0.3)
                             if not check2(data.decode(), message_size, i+1):
                                 connection.sendall(b"404 ERROR: Invalid Measurement Message\n")
 
 
                     elif check3(message) and measure:
+                        print(f"Phase3 Received: {message}")
                         print("Measurement completed")
                         connection.sendall(b"200 OK: Closing Connection\n")
                         break

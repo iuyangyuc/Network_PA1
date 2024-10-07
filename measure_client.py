@@ -35,9 +35,8 @@ def measure_rtt(client_socket, size, probes):
     for i in range(probes):
         start = time.time()
         client_socket.sendall(build_message2(i, size).encode())
-        print(f"Sent: {build_message2(i, size)}")
         data = receive_message(client_socket)
-        print(f"Received: {data.decode()}")
+        print("RTT Received: " + data.decode())
         if check1(data.decode()):
             print(data.decode())
             break
@@ -52,9 +51,8 @@ def measure_tput(client_socket, size, probes):
     for i in range(probes):
         start = time.time()
         client_socket.sendall(build_message2(i, size).encode())
-        print(f"Sent: {build_message2(i, size)}")
         data = receive_message(client_socket)
-        print(f"Received: {data.decode()}")
+        print(f"TPUT Received: {data.decode()}")
         if check1(data.decode()):
             print(data.decode())
             break
@@ -79,11 +77,10 @@ def start_client(server_ip, server_port, measure, probes, size, delay):
             data = receive_message(client_socket)
             message = data.decode()
             if check2(message):
-                print(f"Received: {data.decode()}")
+                print(f"Phase1 Received: {data.decode()}")
             else:
                 break
 
-            print(message)
 
             # Phase2
             if measure == "rtt":
