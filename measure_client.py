@@ -32,12 +32,12 @@ def build_message3():
 def measure_rtt(client_socket, size, probes):
     print("Measuring RTT...")
     file = open("rtt.txt", "w")
-    print(f"Size: {size}")
     for i in range(probes):
         start = time.time()
         client_socket.sendall(build_message2(i, size).encode())
         print(f"Sent: {build_message2(i, size)}")
         data = receive_message(client_socket)
+        print(f"Received: {data.decode()}")
         if check1(data.decode()):
             print(data.decode())
             break
@@ -49,12 +49,12 @@ def measure_rtt(client_socket, size, probes):
 def measure_tput(client_socket, size, probes):
     print("Measuring TPUT...")
     file = open("tput.txt", "w")
-    print(f"Size: {size}")
     for i in range(probes):
         start = time.time()
         client_socket.sendall(build_message2(i, size).encode())
         print(f"Sent: {build_message2(i, size)}")
         data = receive_message(client_socket)
+        print(f"Received: {data.decode()}")
         if check1(data.decode()):
             print(data.decode())
             break
