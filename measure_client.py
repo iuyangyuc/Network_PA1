@@ -79,6 +79,7 @@ def start_client(server_ip, server_port, measure, probes, size, delay):
             if check2(message):
                 print(f"Phase1 Received: {data.decode()}")
             else:
+                print(f"Phase1 Received: {data.decode()}")
                 break
 
 
@@ -94,8 +95,10 @@ def start_client(server_ip, server_port, measure, probes, size, delay):
             data = receive_message(client_socket)
             message = data.decode()
             if check1(message):
-                print(f"Received: {data.decode()}")
+                print(data.decode())
+                break
             else:
+                print(data.decode())
                 break
 
             break
@@ -105,7 +108,7 @@ def start_client(server_ip, server_port, measure, probes, size, delay):
 
 if __name__ == "__main__":
     if len(sys.argv) != 7:
-        print("Usage: python echo_client.py <server_ip> <port> <measure> <probes> <size> <delay>")
+        print("Usage: python3 measure_client.py <server_ip> <port> <measure> <probes> <size> <delay>")
         sys.exit(1)
 
     server_ip = sys.argv[1]
