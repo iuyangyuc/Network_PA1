@@ -20,7 +20,6 @@ def receive_messages(client_socket):
         try:
             data = receive_message(client_socket)
             if not data:
-                # Connection closed
                 print("Connection closed by server.")
                 break
             print(f"Received echo: {data.decode()}")

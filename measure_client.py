@@ -3,13 +3,15 @@ import sys
 import re
 import time
 
-
+# Function to check if the message is a 404 error.
 def check1(message):
     return re.match(r"^404.*", message)
 
+# Function to check if the message is a 200 OK.
 def check2(message):
     return re.match(r"^200.*", message)
 
+# Function to receive messages from the server.
 def receive_message(connection):
     data = b""
     while True:
@@ -19,16 +21,20 @@ def receive_message(connection):
             break
     return data
 
+# Function to build the first message.
 def build_message1(measure, probes, size, delay):
     return f"s {measure} {probes} {size} {delay}\n"
 
+# Function to build the second message.
 def build_message2(sequence_number, size):
     payload = "A" * int(size)
     return f"m {sequence_number} {payload}\n"
 
+# Function to build the third message.
 def build_message3():
     return "t\n"
 
+# Function to measure RTT.
 def measure_rtt(client_socket, size, probes):
     print("Measuring RTT...")
     file = open("rtt.txt", "w")
@@ -45,6 +51,7 @@ def measure_rtt(client_socket, size, probes):
         print(f"RTT: {rtt}")
         file.write(f"{rtt}\n")
 
+# Function to measure TPUT based on RTT.
 def measure_tput(client_socket, size, probes):
     print("Measuring TPUT...")
     file = open("tput.txt", "w")
@@ -62,7 +69,7 @@ def measure_tput(client_socket, size, probes):
         file.write(f"{size / rtt}\n")
 
 
-
+# Function to start the client, connect to the server, and initiate send and receive threads.
 def start_client(server_ip, server_port, measure, probes, size, delay):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_address = (server_ip, server_port)

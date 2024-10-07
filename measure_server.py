@@ -3,35 +3,42 @@ import sys
 import re
 import time
 
-
+# Function to check if the message is a valid setup message.
 def check1(message):
     return re.match(r"^s\s(rtt\s([1-9]|10)\s(1|100|200|400|800|1000)|tput\s([1-9]|10)\s(1000|2000|4000|8000|16000|32000))\s(\d+\.?\d*)$", message)
 
+# Function to check if the message is a valid test message.
 def check2(message, expected_size, expected_seq):
     actual_size = get_test_datelen(message)
     actual_seq = get_test_seq(message)
     return actual_size == int(expected_size) and actual_seq == expected_seq
-    # return actual_size == expected_size and actual_seq == expected_seq
 
+# Function to check if the message is a valid test message without sequence number.
 def check2_noseq(message):
     list = message.split()
     return len(list) == 3 and int(list[1]) == 0
 
+# Function to check if the message is a valid termination message.
 def check3(message):
     return re.match(r"^t$", message)
 
+# Function to get the message size from the setup message.
 def get_message_size(message):
     return str(message.split()[3])
 
+# Function to get the number of probes from the setup message.
 def get_message_probes(message):
     return int(message.split()[2])
 
+# Function to get the message delay from the setup message.
 def get_message_delay(message):
     return float(message.split()[4])
 
+# Function to get the message type from the setup message.
 def get_type(message):
     return message.split()[1]
 
+# Function to receive messages from the client.
 def receive_message(connection):
     data = b""
     while True:
@@ -41,12 +48,15 @@ def receive_message(connection):
             break
     return data
 
+# Function to get the sequence number from the test message.
 def get_test_seq(str):
     return int(str.split()[1])
 
+# Function to get the data length from the test message.
 def get_test_datelen(str):
     return len(str.split()[2])
 
+# Function to start the server, listen for incoming connections, and handle the communication.
 def start_server(port):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_address = ('', port)
